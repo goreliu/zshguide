@@ -109,7 +109,7 @@ echo ${all_files:|bad_files}
 .
 ├── aaa_aaa.txt
 ├── aaa.txt
-├── bbb.txt
+├── ccc.txt
 └── xxx
     ├── aaa bbb.txt
     └── bbb ccc.txt
@@ -123,6 +123,7 @@ echo ${all_files:|bad_files}
 .
 ├── bbb_bbb.txt
 ├── bbb.txt
+├── ccc.txt
 └── xxx
     ├── bbb bbb.txt
     └── bbb ccc.txt
