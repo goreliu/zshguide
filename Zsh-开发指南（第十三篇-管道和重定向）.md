@@ -204,8 +204,73 @@ lrwx------ 1 goreliu goreliu 0 Aug 30 21:34 2 -> /dev/pts/1
 
 ### exec 命令的用法
 
-待补充。
+说起重定向，就不得不提 exec 命令。exec 命令主要用于启动新进程替换当前进程以及对 fd 做一些操作。
+
+用 exec 启动新进程：
+
+```
+% exec cat
+```
+
+看上去效果和直接运行 cat 差不多。但如果运行 ctrl + d 退出 cat，终端模拟器就关闭了，因为在运行 exec cat 的时候，zsh 进程将已经被 cat 取代了，回不去了。
+
+但在脚本中很少直接这样使用 exec，更多情况是用它来操作 fd：
+
+```
+# 将当前 zsh 的错误输出重定向到 test.txt
+% exec 2>test.txt
+# 随意敲入一个不存在的命令，错误提示不出现了
+% fdsafds
+# 错误提示被重定向到 test.txt 里
+% cat test.txt
+zsh: command not found: fdsafds
+```
+
+更多用法：
+
+| 用法          | 功能                            |
+| ----------- | ----------------------------- |
+| n>filename  | 重定向 fd n 的输出到 filename 文件     |
+| n<filename  | 重定向 fd n 的输入为 filename 文件     |
+| n<>filename | 同时重定向 fd n 的输入输出为 filename 文件 |
+| n>&m        | 重定向 fd n 的输出到 fd m            |
+| n<&m        | 重定向 fd n 的输入为 fd m            |
+| n>&-        | 关闭 fd n 的输出                   |
+| n<&-        | 关闭 fd n 的输入                   |
+
+更多例子：
+
+```
+# 把错误输出关闭，这样错误内容就不再显示
+% exec 2>&-
+% fsdafdsa
+
+% exec 3>test.txt
+% echo good >&3
+% exec 3>&-
+# 关闭后无法再输出
+% echo good >&3
+zsh: 3: bad file descriptor
+
+% exec 3>test.txt
+# 将 fd 4 的输出重定向到 fd 3
+% exec 4>&3
+% echo abcd >&4
+# 输出内容到 fd 4，test.txt 内容更新了
+% cat test.txt
+abcd
+```
+
+通常情况我们用 exec 主要为了重定向输出和关闭输出，比较少操作输入。
 
 ### 总结
 
 本文讲了管道和重定向的基本概念和各种用法。Zsh 中的重定向还是非常灵活好用的，之后的文章会详细讲在实际场景中怎样使用。
+
+### 参考
+
+http://adelphos.blog.51cto.com/2363901/1601563
+
+### 更新历史
+
+20170901：增加“exec 命令的用法”。
