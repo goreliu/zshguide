@@ -231,7 +231,7 @@ for i ({1..$#result}) {
 
     if [[ -z $result[i] ]] {
         echo error
-        return
+        return 1
     }
 }
 
