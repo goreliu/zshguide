@@ -173,6 +173,10 @@ zsh/zselect（select 系统调用的封装）
 
 可以用 man zshmodules 查看。
 
+### 自己编写模块
+
+如果因为性能等因素，要自己写 zsh 模块来调用，也是比较方便的。Zsh 的源码中 Src/Modules 是模块目录，里边有一个实例模块 example（example.c 和 example.mdd 文件）。可以参考代码编写自己的模块，难度并不是很大。
+
 ### 总结
 
 本文介绍了几个比较常用的 zsh 内置模块，以后可能继续补充更多模块的用法。
