@@ -11,6 +11,5 @@ for filename (*Zsh-开发指南（第*md) {
         echo "$level [$subtitle]("$filename"#${${subtitle// /-}//、})"
     }
 
-    echo
-    echo
+    echo "\n---\n"
 }
