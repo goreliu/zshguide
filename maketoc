@@ -10,4 +10,7 @@ for filename (*Zsh-开发指南（第*md) {
         [[ $level == "####" ]] && level="- "
         echo "$level [$subtitle]("$filename"#${${subtitle// /-}//、})"
     }
+
+    echo
+    echo
 }
