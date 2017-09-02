@@ -153,7 +153,7 @@ d
 integer float scalar array association
 ```
 
-#### 字符串、数组或哈希表嵌套取值
+### 字符串、数组或哈希表嵌套取值
 
 可以嵌套多层。
 
