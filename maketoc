@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+echo "# Zsh 开发指南 目录"
+
+for filename (*Zsh-开发指南（第*md) {
+    local title=${${${filename#*（}%）*}//-/ }
+    echo "## [$title]("$filename")"
+
+    for i (${(f)"$(grep "^###" $filename)"}) {
+        local level=${i%% *}
+        local subtitle=${i#$level }
+        [[ $level == "####" ]] && level="- "
+        echo "$level [$subtitle]("$filename"#${subtitle// /-})"
+    }
+}
