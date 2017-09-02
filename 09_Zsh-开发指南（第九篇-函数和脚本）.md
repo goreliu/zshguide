@@ -240,10 +240,102 @@ echo good
 
 脚本可以使用 return 返回，也可以使用 exit 命令。exit 命令用法和 return 差不多，如果不加参数则返回 0。但在代码的任何地方，调用 exit 命令即退出脚本，即使是在一个嵌套很深的函数里边理调用的。
 
+### 用 getopts 命令处理命令行选项
+
+有时我们写的脚本需要支持比较复杂的命令行选项，比如 demo -i aa -t bb -cx ccc ddd，这样的话，手动处理就会很麻烦。可以使用内置的 getopts 命令。
+
+```
+#!/bin/zsh
+
+# i: 代表可以接受一个带参数的 -i 选项
+# c 代表可以接受一个不带参数的 -c 选项
+while {getopts i:t:cv arg} {
+    case $arg {
+        (i)
+        # $OPTARG 存放选项对应的参数
+        echo $arg option with arg: $OPTARG
+        ;;
+
+        (t)
+        echo $arg option with arg: $OPTARG
+        ;;
+
+        (c)
+        echo $arg option
+        ;;
+
+        (v)
+        echo version: 0.1
+        ;;
+
+        (?)
+        echo error
+        return 1
+        ;;
+    }
+}
+
+# $OPTIND 指向剩下的第一个未处理的参数
+echo $*[$OPTIND,-1]
+```
+
+运行结果：
+
+```
+% ./demo -i aaa -t bbb -cv ccc ddd
+i option with arg: aaa
+t option with arg: bbb
+c option
+version: 0.1
+ccc ddd
+
+# 可以只加部分选项
+% ./demo -i aaa -v bbb ccc
+i option with arg: aaa
+version: 0.1
+bbb ccc
+
+# 可以一个选项也不加
+% ./demo aaa bbb
+aaa bbb
+
+# 如果选项不带参数，多个选项可以合并到一个 - 后
+% ./demo -i aaa -cv bbb ccc
+i option with arg: aaa
+c option
+version: 0.1
+bbb ccc
+
+# 如果该带参数的选项不带参数，会报错
+% ./demo -i aaa -t
+i option with arg: aaa
+./demo:3: argument expected after -t option
+error
+
+# 加了不支持的选项也会报错
+% ./demo -i aaa -a bbb ccc
+i option with arg: aaa
+./demo:3: bad option: -a
+error
+
+# 如果该带参数的选项不带参数，然后后边紧接着另一个选项，那么选项会被当作参数
+% ./demo -i -c aaa bbb
+i option with arg: -c
+aaa bbb
+```
+
+getopts 的使用还是很方便的，但它不支持长选项（如 --log aaa）。如果需要使用长选项，可以用 getopt 命令，它是一个外部命令，可以 man getopt 查看用法。
+
 ### 总结
 
 本文简单介绍了函数和脚本的写法，重点是参数处理和返回值等等，还有很多没覆盖的地方，以后可能继续补充。
 
+### 参考
+
+https://my.oschina.net/lenglingx/blog/410565
+
 ### 更新历史
 
 20170901：增加用 $? 获取函数返回值的内容。
+
+20170902：增加“用 getopts 命令处理命令行选项”。

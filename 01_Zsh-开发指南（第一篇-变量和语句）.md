@@ -324,7 +324,7 @@ repeat 5 {
 
 ```
 # 格式 + 样例
-case i {
+case $i {
     (a)
     echo 1
     ;;
