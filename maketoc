@@ -7,7 +7,7 @@ for filename (*Zsh-开发指南（第*md) {
     for i (${(f)"$(grep "^###" $filename)"}) {
         local level=${i%% *}
         local subtitle=${i#$level }
-        [[ $level == "####" ]] && level="- "
+        level=${level/"####"/- }
         echo "$level [$subtitle]("$filename"#${${${(L)subtitle// /-}//、}//：})"
     }
 
