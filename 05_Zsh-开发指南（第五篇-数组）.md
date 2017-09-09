@@ -282,28 +282,33 @@ aac
 
 # ${=str} 可以将 str 内容按空格切分成数组
 % array=(${=str})
-% print -l $array
-a
+% print -l $array[2,3]
 bb
 ccc
-dddd
+
 
 % str="a\nbb\nccc\ndddd"
-# 如果需要修改分隔符，可以设置 SH_WORD_SPLIT 变量
-% SH_WORD_SPLIT="\n"
-% array1=(${=str})
+# 如果是其他分隔符，可以用 (s:x:) 指定
+% array=(${(s:\n:)str})
+% print -l $array[2,3]
+bb
+ccc
 
-# 或者用 (s:x:) 方法，如果分隔符是冒号就用 s.:.
-% array2=(${(s:'\n':)str})
-% print -l $array1 $array2
-a
+
+% str="a##bb##ccc##dddd"
+# 分隔符可以是多个字符
+% array=(${(s:##:)str})
+% print -l $array[2,3]
 bb
 ccc
-dddd
-a
+
+
+% str="a:bb:ccc:dddd"
+# 如果分隔符是 :，可以 (s.:.)
+% array=(${(s.:.)str})
+% print -l $array[2,3]
 bb
 ccc
-dddd
 ```
 
 ### 从文件构造数组
@@ -449,3 +454,5 @@ http://www.bash2zsh.com/zsh_refcard/refcard.pdf
 ### 更新历史
 
 20170830：增加“使用连续字符或者数值构造数组”。
+
+20170909：修正“从字符串构造数组”中的错误。
