@@ -287,8 +287,17 @@ bb
 ccc
 
 
+% str="a:bb:ccc:dddd"
+# 如果是其他分隔符，可以设置 IFS 变量指定
+% IFS=:
+% array=(${=str})
+% print -l $array[2,3]
+bb
+ccc
+
+
 % str="a\nbb\nccc\ndddd"
-# 如果是其他分隔符，可以用 (s:x:) 指定
+# 如果是其他分隔符，也可以用 (s:x:) 指定
 % array=(${(s:\n:)str})
 % print -l $array[2,3]
 bb
@@ -456,3 +465,5 @@ http://www.bash2zsh.com/zsh_refcard/refcard.pdf
 20170830：增加“使用连续字符或者数值构造数组”。
 
 20170909：修正“从字符串构造数组”中的错误。
+
+20170910：增加“从字符串构造数组”中的部分内容。
