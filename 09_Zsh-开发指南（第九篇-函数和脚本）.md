@@ -277,6 +277,10 @@ while {getopts i:t:cv arg} {
 
 # $OPTIND 指向剩下的第一个未处理的参数
 echo $*[$OPTIND,-1]
+
+# 或者用 shift 把之前用过的参数移走
+# shift $((OPTIND - 1))
+# echo $*
 ```
 
 运行结果：
