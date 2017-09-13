@@ -366,6 +366,349 @@ for i (Zsh*.md) {
 }
 ```
 
+### 实例七：统一压缩解压工具
+
+功能：Linux 下常用的压缩、归档格式众多，参数各异，写一个用法统一的压缩解压工具，用于创建、解压 `.zip` `.7z` `.tar` `.tgz` `.tbz2` `.txz` `.tar.gz` `.tar.bz2` `.tar.xz` `.cpio` `.ar` `.gz` `.bz2` `.xz` 等文件。
+
+例子：
+
+```
+# a 用于创建压缩文件
+% a a.tgz dir1 file1 file2
+dir1/
+file1
+file2
+
+# al 用于列出压缩文件中的文件列表
+% al a.tgz
+drwxr-xr-x goreliu/goreliu   0 2017-09-13 11:23 dir1/
+-rw-r--r-- goreliu/goreliu   3 2017-09-13 11:23 file1
+-rw-r--r-- goreliu/goreliu   3 2017-09-13 11:23 file2
+
+# x 用于解压文件
+% x a.tgz
+dir1/
+file1
+file2
+a.tgz  ->  a
+
+# 如果解压后的文件名或目录名中当前目录下已经存在，则解压到随机目录
+% x a.tgz
+dir1/
+file1
+file2
+a.tgz  ->  /tmp/test/x-c4I
+```
+
+思路：
+
+1. 压缩文件时，根据传入的文件名判断压缩文件的格式。
+2. 解压和查看压缩文件内容时，根据传入的文件名和 `file` 命令结果判断压缩文件的格式。
+3. 为了复用代码，多个命令整合到一个文件，然后 `ln -s` 成多个命令。
+
+实现：
+
+```
+#!/bin/zsh
+
+get_type_by_name() {
+    case $1 {
+        (*.zip|*.7z|*.jar)
+        echo 7z
+        ;;
+
+        (*.rar|*.iso)
+        echo 7z_r
+        ;;
+
+        (*.tar|*.tgz|*.txz|*.tbz2|*.tar.*)
+        echo tar
+        ;;
+
+        (*.cpio)
+        echo cpio
+        ;;
+
+        (*.cpio.*)
+        echo cpio_r
+        ;;
+
+        (*.gz)
+        echo gz
+        ;;
+
+        (*.xz)
+        echo xz
+        ;;
+
+        (*.bz2)
+        echo bz2
+        ;;
+
+        (*.lzma)
+        echo lzma
+        ;;
+
+        (*.lz4)
+        echo lz4
+        ;;
+
+        (*.ar)
+        echo ar
+        ;;
+
+        (*)
+        return 1
+        ;;
+    }
+}
+
+get_type_by_file() {
+    case $(file -bz $1) {
+        (Zip *|7-zip *)
+        echo 7z
+        ;;
+
+        (RAR *)
+        echo 7z_r
+        ;;
+
+        (POSIX tar *|tar archive)
+        echo tar
+        ;;
+
+        (*cpio archive*)
+        echo cpio
+        ;;
+
+        (*gzip *)
+        echo gz
+        ;;
+
+        (*XZ *)
+        echo xz
+        ;;
+
+        (*bzip2 *)
+        echo bz2
+        ;;
+
+        (*LZMA *)
+        echo lzma
+        ;;
+
+        (*LZ4 *)
+        echo lz4
+        ;;
+
+        (current ar archive)
+        echo ar
+        ;;
+
+        (*)
+        return 1
+        ;;
+    }
+}
+
+
+(($+commands[tar])) || alias tar=bsdtar
+(($+commands[cpio])) || alias cpio=bsdcpio
+
+case ${0:t} {
+    (a)
+
+    (($#* >= 2)) || {
+        echo Usage: $0 target files/dirs
+        return 1
+    }
+
+    case $(get_type_by_name $1) {
+        (7z)
+        7z a $1 $*[2,-1]
+        ;;
+
+        (tar)
+        tar -cavf $1 $*[2,-1]
+        ;;
+
+        (cpio)
+        find $*[2,-1] -print0 | cpio -H newc -0ov > $1
+        ;;
+
+        (gz)
+        gzip -cv $*[2,-1] > $1
+        ;;
+
+        (xz)
+        xz -cv $*[2,-1] > $1
+        ;;
+
+        (bz2)
+        bzip2 -cv $*[2,-1] > $1
+        ;;
+
+        (lzma)
+        lzma -cv $*[2,-1] > $1
+        ;;
+
+        (lz4)
+        lz4 -cv $2 > $1
+        ;;
+
+        (ar)
+        ar rv $1 $*[2,-1]
+        ;;
+
+        (*)
+        echo $1: error
+        return 1
+        ;;
+    }
+    ;;
+
+    (al)
+
+    (($#* >= 1)) || {
+        echo Usage: $0 files
+        return 1
+    }
+
+    for i ($*) {
+        case $(get_type_by_name $i || get_type_by_file $i) {
+            (7z|7z_r)
+            7z l $i
+            ;;
+
+            (tar)
+            tar -tavf $i
+            ;;
+
+            (cpio|cpio_r)
+            cpio -itv < $i
+            ;;
+
+            (gz)
+            zcat $i
+            ;;
+
+            (xz)
+            xzcat $i
+            ;;
+
+            (bz2)
+            bzcat $i
+            ;;
+
+            (lzma)
+            lzcat $i
+            ;;
+
+            (lz4)
+            lz4cat $i
+            ;;
+
+            (ar)
+            ar tv $i
+            ;;
+
+            (*)
+            echo $i: error
+            ;;
+        }
+    }
+    ;;
+
+    (x)
+
+    (($#* >= 1)) || {
+        echo Usage: $0 files
+        return 1
+    }
+
+    for i ($*) {
+        local outdir=${i%.*}
+
+        [[ $outdir == *.tar ]] && {
+            outdir=$outdir[1, -5]
+        }
+
+        if [[ -e $outdir ]] {
+            outdir="$(mktemp -d -p $PWD x-XXX)"
+        } else {
+            mkdir $outdir
+        }
+
+        case $(get_type_by_name $i || get_type_by_file $i) {
+            (7z|7z_r)
+            7z x $i -o$outdir
+            ;;
+
+            (tar)
+            tar -xavf $i -C $outdir
+            ;;
+
+            (cpio|cpio_r)
+            local file_path=$i
+            [[ $i != /* ]] && file_path=$PWD/$i
+            cd $outdir && cpio -iv < $file_path && cd ..
+            ;;
+
+            (gz)
+            zcat $i > $outdir/$i[1,-4]
+            ;;
+
+            (xz)
+            xzcat $i > $outdir/$i[1,-4]
+            ;;
+
+            (bz2)
+            bzcat $i > $outdir/$i[1,-5]
+            ;;
+
+            (lzma)
+            lzcat $i > $outdir/$i[1,-6]
+            ;;
+
+            (lz4)
+            lz4cat $i > $outdir/$i[1,-5]
+            ;;
+
+            (ar)
+            local file_path=$i
+            [[ $i != /* ]] && file_path=$PWD/$i
+            cd $outdir && ar x $file_path && cd ..
+            ;;
+
+            (*)
+            echo $i: error
+            ;;
+        }
+
+        local files=$(ls -A $outdir)
+
+        if [[ -z $files ]] {
+            rmdir $outdir
+        } elif [[ -e $outdir/$files && ! -e $files ]] {
+            mv -v $outdir/$files . && rmdir $outdir
+            echo $i " -> " $files
+        } else {
+            echo $i " -> " $outdir
+        }
+    }
+    ;;
+
+    (*)
+    echo error
+    return 1
+    ;;
+}
+```
+
 ### 总结
 
 本文讲解了几个简单的 zsh 脚本，后续可能会补充更多个。
+
+### 更新历史
+
+2017.09.13：新增“实例七：统一压缩解压工具”。
