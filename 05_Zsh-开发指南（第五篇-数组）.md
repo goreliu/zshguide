@@ -185,10 +185,10 @@ a bb 1
 0
 
 # 可以用大 I 判断是否存在元素
-% (( $array[(I)dddd] )) && echo good
+% (($array[(I)dddd])) && echo good
 good
 
-% (( $array[(I)xxx] )) && echo good
+% (($array[(I)xxx])) && echo good
 
 
 % array=(aaa bbb aab bbc)
@@ -322,7 +322,7 @@ ccc
 
 ### 从文件构造数组
 
-test.txt 内容。
+`test.txt` 内容。
 
 ```
 a
@@ -432,7 +432,7 @@ txt
 /j/b/c.txt
 ```
 
-:# 也可以在数组上用，但更实用一些。
+`:#` 也可以在数组上用，但更实用一些。
 
 ```
 % array=(aaa bbb ccc)

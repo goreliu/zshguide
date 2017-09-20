@@ -241,7 +241,7 @@ while [[ ]] {
 
 ```
 # 样例 死循环
- while (( 1 )) {
+ while ((1)) {
     echo good
 }
 ```
