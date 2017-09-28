@@ -97,7 +97,7 @@ a b c d e f g
 % echo $#array2
 11
 
-# 去掉引号后，array1 被转成了一个字符串
+# 去掉小扩号后，array1 被转成了一个字符串
 % array2+=$array1
 % echo $#array2
 12
@@ -202,11 +202,11 @@ good
 ```
 % array=(aa CCC b DD e 000 AA 3 aa 22)
 
-# 升序排列，从小到大
+# 用小写字母 o 升序排列，从小到大
 % echo ${(o)array}
 000 22 3 aa aa AA b CCC DD e
 
-# 降序排列，从大到小
+# 用大写字母 O 降序排列，从大到小
 % echo ${(O)array}
 e DD CCC b AA aa aa 3 22 000
 
@@ -249,7 +249,7 @@ aa1 aa2 aa3
 % array=(aa{15..19..2}) && echo $array
 aa15 aa17 aa19
 
-# 可以从大到小展开
+# 也可以从大到小展开
 % array=(aa{19..15..2}) && echo $array
 aa19 aa17 aa15
 
@@ -288,7 +288,7 @@ ccc
 
 
 % str="a:bb:ccc:dddd"
-# 如果是其他分隔符，可以设置 IFS 变量指定
+# 如果是其他分隔符，可以设置 IFS 环境变量指定
 % IFS=:
 % array=(${=str})
 % print -l $array[2,3]
