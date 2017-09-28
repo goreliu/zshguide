@@ -87,7 +87,7 @@ null
 % cat test.json | jq .hashtable.k2
 "v2"
 
-# 也可以这样，中某些复杂场景分开写比较方便，类似管道
+# 也可以这样，某些复杂场景中分开写比较方便，类似管道
 % cat test.json | jq '.hashtable | .k2'
 "v2"
 
