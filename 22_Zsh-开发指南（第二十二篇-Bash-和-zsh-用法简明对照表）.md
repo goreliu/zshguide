@@ -15,7 +15,7 @@
 | `echo a*b`             | `echo "a*b"`          | Zsh 默认配置中，通配符如果匹配不到文件会报错           |
 | `if true; then :; fi`  | `if true {}`          | Zsh 中不需要使用 `:` 作为空语句               |
 | `[ "$var" == value ]`  | `[[ $var == value ]]` | Zsh 中的 `[ ]` 里不支持 `==`，一律用 `[[ ]]` |
-| `ls | tee file | less` | `ls > file | less`    | Zsh 中不需要用 `tee` 即可实现相同功能           |
+| `ls \| tee file \| less` | `ls > file \| less`    | Zsh 中不需要用 `tee` 即可实现相同功能           |
 
 ### 总结
 
