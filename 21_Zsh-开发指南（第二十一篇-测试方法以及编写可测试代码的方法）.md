@@ -116,6 +116,10 @@ check_process() {
     echo 0
 }
 
+# 其他情况
+# 省略
+
+
 # 路径存在的情况
 get_process_cwd() {
     [[ $1 == process1 ]] && echo /path/to/cwd1 && return
@@ -131,6 +135,9 @@ get_process_cwd() {
 get_process_cwd() {
     echo /wrong/path
 }
+
+# 其他情况
+# 省略
 ```
 
 然后组合这些情况，写测试脚本判断 main.zsh 的处理是否符合预期。
