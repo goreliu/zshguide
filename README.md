@@ -47,3 +47,5 @@
 [第二十二篇 Bash 和 zsh 用法简明对照表](22_Zsh-开发指南（第二十二篇-Bash-和-zsh-用法简明对照表）.md)
 
 [第二十三篇 用 jq 命令处理 JSON 数据](23_Zsh-开发指南（第二十三篇-用-jq-命令处理-JSON-数据）.md)
+
+付费解决 Windows、Linux、Shell、C、C++、AHK、Python、JavaScript、Lua 等领域相关问题，灵活定价，欢迎咨询，微信 ly50247。
