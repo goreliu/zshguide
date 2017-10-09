@@ -855,6 +855,59 @@ rr() {
 }
 ```
 
+使用 inotifywait 的版本（无需循环 sleep 等待）：
+
+```
+rr() {
+    (($+max_process)) || typeset -gi max_process=10
+    (($+running_process)) || typeset -gA running_process=()
+
+    while {getopts j:h arg} {
+        case $arg {
+            (j)
+            ((OPTARG > 0)) && max_process=$OPTARG
+            ;;
+
+            (h)
+            echo "Usage: $0 [-j max_process] [cmd] [args]"
+            return
+            ;;
+        }
+    }
+
+    shift $((OPTIND - 1))
+
+    (($# == 0)) && {
+        for i (${(k)running_process}) {
+            [[ -e $i ]] || unset "running_process[$i]"
+        }
+
+        echo "running/max: $#running_process/$max_process"
+        (($#running_process > 0)) && echo "pids:" ${${(k)running_process/\/proc\/}/\/exe}
+        return 0
+    }
+
+    while ((1)) {
+        local running_process_num=$#running_process
+
+        if (($running_process_num < max_process)) {
+            $* &
+            running_process[/proc/$!/exe]=1
+            return
+        }
+
+        for i (${(k)running_process}) {
+            [[ -e $i ]] || unset "running_process[$i]"
+        }
+
+        (($#running_process == $running_process_num)) && {
+            echo "wait $running_process_num pids:" ${${(k)running_process/\/proc\/}/\/exe}
+            inotifywait -q ${(k)running_process}
+        }
+    }
+}
+```
+
 ### 实例九：批量转换图片格式
 
 功能：
@@ -950,24 +1003,19 @@ pid: 5965 5966 5967 5968 5959
 ```
 #!/bin/zsh
 
-# rr 是上一个实例中代码的改进版本
+# rr 是上一个实例中的代码
 rr() {
     (($+max_process)) || typeset -gi max_process=10
-    (($+check_interval)) || typeset -gF check_interval=1
     (($+running_process)) || typeset -gA running_process=()
 
-    while {getopts i:j:h arg} {
+    while {getopts j:h arg} {
         case $arg {
-            (i)
-            ((OPTARG > 0)) && check_interval=$OPTARG
-            ;;
-
             (j)
             ((OPTARG > 0)) && max_process=$OPTARG
             ;;
 
             (h)
-            echo "Usage: $0 [-i check_interval] [-j max_process] [cmd] [args]"
+            echo "Usage: $0 [-j max_process] [cmd] [args]"
             return
             ;;
         }
@@ -977,11 +1025,11 @@ rr() {
 
     (($# == 0)) && {
         for i (${(k)running_process}) {
-            [[ -e /proc/$i ]] || unset "running_process[$i]"
+            [[ -e $i ]] || unset "running_process[$i]"
         }
 
         echo "running/max: $#running_process/$max_process"
-        (($#running_process > 0)) && echo "pid: ${(k)running_process}"
+        (($#running_process > 0)) && echo "pids:" ${${(k)running_process/\/proc\/}/\/exe}
         return 0
     }
 
@@ -990,18 +1038,17 @@ rr() {
 
         if (($running_process_num < max_process)) {
             $* &
-            running_process[$!]=1
+            running_process[/proc/$!/exe]=1
             return
         }
 
         for i (${(k)running_process}) {
-            [[ -e /proc/$i ]] || unset "running_process[$i]"
+            [[ -e $i ]] || unset "running_process[$i]"
         }
 
         (($#running_process == $running_process_num)) && {
-            echo "running: $running_process_num, wait ${check_interval}s ..."
-            echo "pid: ${(k)running_process}"
-            sleep $check_interval
+            echo "wait $running_process_num pids:" ${${(k)running_process/\/proc\/}/\/exe}
+            inotifywait -q ${(k)running_process}
         }
     }
 }
@@ -1040,3 +1087,5 @@ rename .GIF.JPG _g.jpg **/*.JPG
 ### 更新历史
 
 2017.09.13：新增“实例七”、“实例八”和“实例九”。
+
+2017.10.09：“示例八”和“示例九”中，新增使用 inotifywait 的 rr 函数。
