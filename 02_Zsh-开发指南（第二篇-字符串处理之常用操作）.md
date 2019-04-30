@@ -294,6 +294,18 @@ cc
 cc
 ```
 
+```
+# 或者先转换成数组
+% str="1:2::4"
+% str_array=(${(s/:/)str})
+% echo $str_array
+1 2 4
+% echo $str_array[2]
+2
+% echo $str_array[3]
+4
+```
+
 ### 多行字符串
 
 字符串定义可以跨行。
