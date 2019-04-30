@@ -304,6 +304,13 @@ cc
 2
 % echo $str_array[3]
 4
+
+# 保留其中的空字符串
+% str_array=("${(@s/:/)str}")
+% echo $str_array[3]
+
+% echo $str_array[4]
+4
 ```
 
 ### 多行字符串
