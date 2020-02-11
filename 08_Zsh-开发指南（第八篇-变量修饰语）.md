@@ -147,9 +147,9 @@ d
 % float f=1.2
 % str=abc
 % array=(a b c)
-% local -A hashmap=(k1 v1 k2 v2)
+% local -A table=(k1 v1 k2 v2)
 
-% echo ${(t)i} ${(t)f} ${(t)str} ${(t)array} ${(t)hashmap}
+% echo ${(t)i} ${(t)f} ${(t)str} ${(t)array} ${(t)table}
 integer float scalar array association
 ```
 
@@ -169,8 +169,8 @@ cc
 % echo ${${array[2]}[2]}
 b
 
-% local -A hashmap=(k1 v1 k2 v2 k3 v3)
-% echo ${${hashmap[k1]}[2]}
+% local -A table=(k1 v1 k2 v2 k3 v3)
+% echo ${${table[k1]}[2]}
 1
 ```
 
