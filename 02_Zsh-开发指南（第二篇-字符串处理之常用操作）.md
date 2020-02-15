@@ -277,6 +277,21 @@ x
 /a/b/c
 ```
 
+### 相对路径转绝对路径
+
+```
+# ${filepath:A} 功能相当于 $(readlink -f $filepath)
+% pwd
+/tmp/test
+% ls -lF
+-rw-r--r-- 1 goreliu goreliu  0 Feb 15 13:14 a.txt
+lrwxrwxrwx 1 goreliu goreliu 11 Feb 15 13:16 b -> /usr/bin/ls*
+% filepath1=a.txt
+% filepath2=b
+% echo ${filepath1:A} ${filepath2:A}
+/tmp/test/a.txt /usr/bin/ls
+```
+
 ### 字符串分隔
 
 ```
