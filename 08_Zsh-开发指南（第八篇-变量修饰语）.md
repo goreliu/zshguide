@@ -43,6 +43,10 @@ Abc
 % echo ${${a:u}:l}
 abc
 
+# 可以简化成
+% echo ${a:u:l}
+abc
+
 # 可以两种风格嵌套在一起
 % echo ${(C)${a:u}}
 Abc
