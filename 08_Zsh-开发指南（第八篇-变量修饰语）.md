@@ -104,6 +104,7 @@ zsh: var: error
 % var=abc
 # 如果 var 有值，输出 123
 % echo ${var:+123}
+123
 % echo ${varr:+123}
 
 ```
