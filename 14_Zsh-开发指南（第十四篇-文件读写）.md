@@ -124,7 +124,7 @@ rm: shell built-in command
 ```
 % str=ab
 % str+="\ncd"
-% str +="\n$str"
+% str+="\n$str"
 
 echo $str > test.txt
 ```
