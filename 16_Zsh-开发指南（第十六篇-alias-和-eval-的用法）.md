@@ -6,7 +6,7 @@ alias（别名）在 shell 中是非常常用的，它主要用于给命令起�
 
 最典型的例子是将 ls -l 简化成 ll：
 
-```
+```zsh
 % alias ll='ls -l'
 % ll
 total 0
@@ -16,7 +16,7 @@ drwxr-xr-x 0 goreliu goreliu 512 Aug 31 13:37 yaourt-tmp-goreliu
 
 alias 的效果相当于直接将字符串替换过来，比较好理解。
 
-```
+```zsh
 # 直接运行 alias，会列出所有的 alias
 % alias
 ll='ls -l'
@@ -26,7 +26,7 @@ lla='ls -F --color --time-style=long-iso -lA'
 
 这样的 alias 只有在行首出现时，才会被解析。但 zsh 中还有一种功能更强大的全局 alias，不在行首也能被解析：
 
-```
+```zsh
 % alias -g G='| grep'
 
 % ls G tmux
@@ -35,7 +35,7 @@ tmux-1000
 
 但这样需要格外注意可能导致的副作用，比如我想创建一个名为 G 的文件：
 
-```
+```zsh
 % touch G
 touch: missing file operand
 Try 'touch --help' for more information.
@@ -53,7 +53,7 @@ eval 的功能是将字符串作为代码来执行。看上去好像很简单，
 
 在 bash 中，eval 的一个重要的使用场景是将变量的值当变量名，然后取它的变量值，类似于 c 语言中指向变量的指针：
 
-```
+```zsh
 % str1=str2
 % str2=abc
 % eval echo \$$str1
@@ -64,7 +64,7 @@ abc
 
 这个用法很容易出问题，而且可读性很差。幸好 zsh 中无需这么用，有更好的办法：
 
-```
+```zsh
 % str1=str2
 % str2=abc
 % echo ${(P)str1}

@@ -10,7 +10,7 @@ UNIX domain socket 是比管道更先进的进程通信方法，是全双工的�
 
 Socket 文件的用法：
 
-```
+```zsh
 # 监听连接端
 # 首先要加载 socket 模块
 % zmodload zsh/net/socket
@@ -29,7 +29,7 @@ Socket 文件的用法：
 good
 ```
 
-```
+```zsh
 # 发起连接端
 # 首先要加载 socket 模块
 % zmodload zsh/net/socket
@@ -48,7 +48,7 @@ good
 
 关闭连接：
 
-```
+```zsh
 # 发起连接端
 # fd 是之前存放 fd 号的变量，不需要加 $
 % exec {fd}>&-
@@ -64,7 +64,7 @@ good
 
 使用 TCP 连接的方式和使用 socket 文件基本一样。
 
-```
+```zsh
 # 监听连接端
 # 首先要加载 tcp 模块
 % zmodload zsh/net/tcp
@@ -83,7 +83,7 @@ good
 good
 ```
 
-```
+```zsh
 # 发起连接端
 # 首先要加载 tcp 模块
 % zmodload zsh/net/tcp
@@ -100,7 +100,7 @@ good
 
 关闭连接：
 
-```
+```zsh
 # 发起连接端
 # fd 是之前存放 fd 号的变量
 % ztcp -c $fd
@@ -114,7 +114,7 @@ good
 
 recv_tcp，监听指定端口，并输出发送过来的消息。使用方法：recv_tcp 端口
 
-```
+```zsh
 #!/bin/zsh
 
 zmodload zsh/net/tcp
@@ -139,9 +139,9 @@ while ((1)) {
 }
 ```
 
-send_tcp，用来向指定机器的指定端口发一条消息。使用方法：send_tcp 机器名  端口 消息 （机器名可选，如果没有则发到本机，消息可以包含空格）
+send_tcp，用来向指定机器的指定端口发一条消息。使用方法：send_tcp 机器名 端口 消息 （机器名可选，如果没有则发到本机，消息可以包含空格）
 
-```
+```zsh
 #!/bin/zsh
 
 zmodload zsh/net/tcp

@@ -34,7 +34,7 @@ process1 和 process2 两个进程都是复杂的外部依赖，不能在主体�
 
 检查进程是否存在和获取进程 cwd 目录的 util.zsh 脚本：
 
-```
+```zsh
 #!/bin/zsh
 
 check_process() {
@@ -46,10 +46,9 @@ get_process_cwd() {
 }
 ```
 
-
 主体逻辑脚本 main.zsh：
 
-```
+```zsh
 #!/bin/zsh
 
 # 有错误即退出，可以省掉很多错误处理的代码
@@ -94,7 +93,7 @@ util.zsh 里的两个函数功能过于简单，无需测试。
 
 测试 main.zsh 时，需要构造一系列测试用的 util.zsh，用于模拟各种情况：
 
-```
+```zsh
 # 进程存在的情况
 check_process() {
     echo $$
@@ -146,7 +145,7 @@ get_process_cwd() {
 
 util_test1.zsh 内容：
 
-```
+```zsh
 #!/bin/zsh
 
 # 进程存在
@@ -163,7 +162,7 @@ get_process_cwd() {
 
 test.zsh 内容：
 
-```
+```zsh
 #!/bin/zsh
 
 # 用于测试的函数，可以独立成单独脚本以便复用
