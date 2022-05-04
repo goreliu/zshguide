@@ -32,8 +32,9 @@ good
 % [[ abcd == abc[bcd] ]] && echo good
 good
 
-# 如果中括号里第一个字符是 ^，则匹配除了除了中括号里的单个字符
+# 如果中括号里第一个字符是 ^，则匹配除了中括号里的单个字符
 % [[ abcd == abc[^de] ]] && echo good
+
 % [[ abcd == abc[^ce] ]] && echo good
 good
 
