@@ -376,6 +376,7 @@ line 2. orange
 
 # 输出包含 pp 的第一行，但从左截掉 “line” 4个字符。
 echo ${"$(<test.txt)"[(fr)*pp*]#line}
+1. apple
 ```
 
 ### 读取进程输出到字符串
