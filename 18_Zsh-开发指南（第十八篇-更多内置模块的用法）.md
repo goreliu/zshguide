@@ -4,7 +4,7 @@
 
 ### 模块的使用方法
 
-```
+```zsh
 # 使用 zmodload 加模块名来加载模块
 % zmodload zsh/mathfunc
 
@@ -49,7 +49,7 @@ zsh/zutil
 
 我们知道使用 date 命令可以查看当前时间，也可以用来做日期时间的格式转换。但如果脚本里需要频繁地读取或者处理时间（比如打日志的时候，每一行加一个时间戳），那么调用 date 命令的资源消耗就太大了。Zsh 的 zsh/datetime 模块提供和 date 命令类似的功能。
 
-```
+```zsh
 % zmodload zsh/datetime
 
 # 输出当前时间戳（从 1970 年年初到现在的秒数），和 date +%s 一样
@@ -89,7 +89,7 @@ zsh/zutil
 
 Gdbm 是一个很轻量的 Key-Value 数据库，可以认为它就像一个保存在文件里的哈希表。Zsh 的 zsh/db/gdbm 模块可以很方便地读写 gdbm 数据库文件。
 
-```
+```zsh
 % zmodload zsh/db/gdbm
 
 # 声明数据库文件对应的哈希表
@@ -125,7 +125,7 @@ k1 v1 k2 v2 k3 v3
 
 有时我们需要在未来的某个时刻运行某一个命令。虽然也可以 sleep 然后运行，但这样要多占两个进程，而且不好控制（比如要取消运行其中的某一个）。Zsh 的 zsh/sched 模块用于调度命令的运行。
 
-```
+```zsh
 % zmodload zsh/sched
 
 # 5 秒后运行 ls 命令

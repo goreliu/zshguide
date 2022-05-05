@@ -10,7 +10,7 @@
 
 例子：
 
-```
+```zsh
 src 的目录结构：
 
 src
@@ -43,7 +43,7 @@ dst
 1. 首先需要先将 src 目录下的目录名筛选出来，可以用 `**/*(/)` 匹配。
 2. 然后用 `mkdir -p` 在 dst 目录中创建对应的目录。
 
-```
+```zsh
 # 参数 1：src 目录
 # 参数 2：待创建的 dst 目录
 
@@ -63,7 +63,7 @@ for i ($1/**/*(/)) {
 
 例子：
 
-```
+```zsh
 当前目录的所有文件：
 
 aa.txt
@@ -88,7 +88,7 @@ hh ii.txt
 
 实现：
 
-```
+```zsh
 #!/bin/zsh
 
 all_files=(*)
@@ -107,7 +107,7 @@ echo ${all_files:|bad_files}
 
 例子：
 
-```
+```zsh
 # 实现 renamex 命令，接受的第一个参数为 sed 的主体参数，其余参数是文件列表
 # 效果是根据 sed 对文件名的修改重命名这些文件
 
@@ -142,7 +142,7 @@ echo ${all_files:|bad_files}
 
 实现：
 
-```
+```zsh
 #!/bin/zsh
 
 (($+2)) || {
@@ -170,7 +170,7 @@ for name ($*[2,-1]) {
 
 实现：
 
-```
+```zsh
 #!/bin/zsh
 
 # D 是包含以 . 开头的隐藏文件
@@ -206,7 +206,7 @@ for i ($files) {
 
 实现：
 
-```
+```zsh
 #!/bin/zsh
 
 local -A table=(
@@ -271,7 +271,7 @@ error
 
 例子：
 
-```
+```zsh
 当前目录有如下文件：
 
 Zsh-开发指南（第一篇-变量和语句）.md
@@ -325,7 +325,7 @@ Zsh-开发指南（第四篇-字符串处理之通配符）.md
 
 实现：
 
-```
+```zsh
 #!/bin/zsh
 
 # 转换数字的逻辑和上一个实例一样
@@ -386,7 +386,7 @@ Linux 下常用的压缩、归档格式众多，参数各异，写一个用法�
 
 例子：
 
-```
+```zsh
 # a 用于创建压缩文件
 % a a.tgz dir1 file1 file2
 dir1/
@@ -422,7 +422,7 @@ a.tgz  ->  /tmp/test/x-c4I
 
 实现：
 
-```
+```zsh
 #!/bin/zsh
 
 get_type_by_name() {
@@ -727,7 +727,7 @@ case ${0:t} {
 
 例子：
 
-```
+```zsh
 # rr 是一个函数（可放在 .zshrc 中），直接 rr 加命令即可使用
 # 命令中支持变量、重定向等等，格式上和直接输入命令没有区别（不支持 alias）
 % rr sleep 5
@@ -813,7 +813,7 @@ pid: 5070 5060 5072 5061 5073 5075 5076 5068 5058 5059
 
 实现：
 
-```
+```zsh
 rr() {
     (($+max_process)) || typeset -g max_process=10
     (($+running_process)) || typeset -gA running_process=()
@@ -857,7 +857,7 @@ rr() {
 
 使用 inotifywait 的版本（无需循环 sleep 等待）：
 
-```
+```zsh
 rr() {
     (($+max_process)) || typeset -gi max_process=10
     (($+running_process)) || typeset -gA running_process=()
@@ -916,7 +916,7 @@ rr() {
 
 例子：
 
-```
+```zsh
 % tree
 .
 ├── mine
@@ -995,12 +995,12 @@ pid: 5965 5966 5967 5968 5959
 
 1. 并发运行命令的方法见上一个实例。
 2. 转换图片格式用 `gm convert` 命令（graphicsmagick 中）或者 `convert` 命令（imagemagick 中）。
-3. 常见的图片文件扩展名有 `jpg`  `jpeg`  `png`  `gif`，另外可能是大写的扩展名。
+3. 常见的图片文件扩展名有 `jpg` `jpeg` `png` `gif`，另外可能是大写的扩展名。
 4. 为了避免类似 `a.gif` 覆盖 `a.jpg` 的情况，为不同的文件格式添加不同后缀，这样可以无需检查是否有同名文件，加快速度。
 
 实现：
 
-```
+```zsh
 #!/bin/zsh
 
 # rr 是上一个实例中的代码
@@ -1089,3 +1089,4 @@ rename .GIF.JPG _g.jpg **/*.JPG
 2017.09.13：新增“实例七”、“实例八”和“实例九”。
 
 2017.10.09：“示例八”和“示例九”中，新增使用 inotifywait 的 rr 函数。
+

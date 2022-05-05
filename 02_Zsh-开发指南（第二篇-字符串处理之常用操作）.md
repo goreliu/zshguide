@@ -8,7 +8,7 @@
 
 ### 字符串长度
 
-```
+```zsh
 % str=abcde
 % echo $#str
 5
@@ -19,7 +19,7 @@
 
 ### 字符串拼接
 
-```
+```zsh
 % str1=abc
 % str2=def
 
@@ -35,7 +35,7 @@ abcdefabc
 
 字符串切片之前也提过，这里简单复习一下。逗号前后不能有空格。字符位置是从 1 开始算起的。
 
-```
+```zsh
 % str=abcdef
 % echo $str[2,4]
 bcd
@@ -48,7 +48,7 @@ echo ${1[2,4]}
 
 字符串切片还有另一种风格的方法，即 bash 风格，功能大同小异。通常没有必要用这个，而且因为字符位置是从 0 开始算，容易混淆。
 
-```
+```zsh
 % str=abcdef
 % echo ${str:1:3}
 bcd
@@ -58,7 +58,7 @@ bcde
 
 ### 字符串截断
 
-```
+```zsh
 % str=abcdeabcde
 
 # 删除左端匹配到的内容，最小匹配
@@ -82,7 +82,7 @@ abc
 
 子字符串定位。
 
-```
+```zsh
 % str=abcdef
 
 # 这里用的是 i 的大写，不是 L 的小写
@@ -107,7 +107,7 @@ good
 
 ### 遍历字符
 
-```
+```zsh
 % str=abcd
 
 % for i ({1..$#str}) {
@@ -122,7 +122,8 @@ d
 ### 字符串替换
 
 按内容替换和删除字符。
-```
+
+```zsh
 % str=abcabc
 
 # 只替换找到的第一个
@@ -168,7 +169,7 @@ abc
 
 按位置删除字符。
 
-```
+```zsh
 %str=abcdef
 
 # 删除指定位置字符
@@ -184,7 +185,7 @@ bf
 
 按位置替换字符。
 
-```
+```zsh
 % str=abcdefg
 
 # 一对一地替换
@@ -203,7 +204,7 @@ a2345defg
 
 如果用 `[[ "$strxx" == "" ]]` ，那无法区分变量是没有定义还是内容为空，在某些情况是需要区分二者的。
 
-```
+```zsh
 % (($+strxx)) && echo good
 
 % strxx=""
@@ -217,7 +218,7 @@ good
 
 判断是否包含字符串。
 
-```
+```zsh
 % str1=abcd
 % str2=bc
 
@@ -227,7 +228,7 @@ good
 
 正则表达式匹配。
 
-```
+```zsh
 % str=abc55def
 
 # 少量字符串的话，尽量不要用 grep
@@ -239,7 +240,7 @@ a
 
 ### 大小写转换
 
-```
+```zsh
 % str="ABCDE abcde"
 
 # 转成大写，(U) 和 :u 两种用法效果一样
@@ -251,13 +252,13 @@ ABCDE ABCDE --- ABCDE ABCDE
 abcde abcde --- abcde abcde
 
 # 转成首字母大写
-% echo ${(C)str} 
+% echo ${(C)str}
 Abcde Abcde
 ```
 
 ### 目录文件名截取
 
-```
+```zsh
 % filepath=/a/b/c.x
 
 # :h 是取目录名，即最后一个 / 之前的部分，如果没有 / 则为 .
@@ -279,7 +280,7 @@ x
 
 ### 相对路径转绝对路径
 
-```
+```zsh
 # ${filepath:A} 功能相当于 $(readlink -f $filepath)
 % pwd
 /tmp/test
@@ -294,7 +295,7 @@ lrwxrwxrwx 1 goreliu goreliu 11 Feb 15 13:16 b -> /usr/bin/ls*
 
 ### 字符串分隔
 
-```
+```zsh
 # 使用空格作为分隔符，多个空格也只算一个分隔符
 % str='aa bb cc dd'
 % echo ${str[(w)2]}
@@ -309,7 +310,7 @@ cc
 cc
 ```
 
-```
+```zsh
 # 或者先转换成数组
 % str="1:2::4"
 % str_array=(${(s/:/)str})
@@ -332,7 +333,7 @@ cc
 
 字符串定义可以跨行。
 
-```
+```zsh
 % str="line1
 > line2"
 % echo $str
@@ -342,7 +343,7 @@ line2
 
 ### 读取文件内容到字符串
 
-```
+```zsh
 # 比用 str=$(cat filename) 性能好很多
 str=$(<filename)
 
@@ -359,12 +360,12 @@ for i (${(f)"$(<filename)"}) {
 
 文件 test.txt 内容如下：
 
-```
+```zsh
 line 1. apple
 line 2. orange
 ```
 
-```
+```zsh
 # 小文件或者需要频繁调用时，尽量不要用 sed
 % echo ${"$(<test.txt)"[(f)2]}
 line 2. orange
@@ -375,6 +376,7 @@ line 2. orange
 
 # 输出包含 pp 的第一行，但从左截掉 “line” 4个字符。
 echo ${"$(<test.txt)"[(fr)*pp*]#line}
+1. apple
 ```
 
 ### 读取进程输出到字符串
@@ -383,7 +385,7 @@ echo ${"$(<test.txt)"[(fr)*pp*]#line}
 
 上边字符串相关的处理，直接把 `$(<test.txt)` 换成 `$(命令)` 即可。如果一定需要一个文件名，可以这样。
 
-```
+```zsh
 # 返回 fd 路径，优先使用，但某些场景会出错
 % wc -l <(ps)
 4 /proc/self/fd/11

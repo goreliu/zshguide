@@ -6,13 +6,13 @@
 
 写文件要比读文件简单一些，最常用的用法是使用 > 直接将命令的输出重定向到文件。如果文件存在，内容会被覆盖；如果文件不存在，会被创建。
 
-```
+```zsh
 % echo abc > test.txt
 ```
 
 如果不想覆盖之前的文件内容，可以追加写入：
 
-```
+```zsh
 % echo abc >> test.txt
 ```
 
@@ -24,7 +24,7 @@
 
 touch 命令用于创建文件（普通文件）：
 
-```
+```zsh
 % touch test1.txt test2.txt
 
 # 或者用 echo 输出重定向，效果和 touch 一样
@@ -44,7 +44,7 @@ touch 命令用于创建文件（普通文件）：
 
 我在树莓派 3B 简单测试一下：
 
-```
+```zsh
 # 三个脚本，分别创建 1000 个文件
 % cat test1 test2 test3
 #!/bin/zsh
@@ -58,7 +58,7 @@ echo -n >>test2{1..1000}.txt
 >>test3{1..1000}.txt </dev/null
 ```
 
-```
+```zsh
 # 运行了几次，结果差不多
 % time ./test1; time ./test2; time ./test3
 ./test1  0.02s user 0.03s system 86% cpu 0.058 total
@@ -72,7 +72,7 @@ echo -n >>test2{1..1000}.txt
 
 有时我们需要清空一个现有的文件：
 
-```
+```zsh
 # 使用 echo 输出重定向
 % echo -n >test.txt
 
@@ -89,7 +89,7 @@ echo -n >>test2{1..1000}.txt
 
 删除文件的方法比较单一，用 rm 命令即可。
 
-```
+```zsh
 % rm test1.txt test2.txt
 
 # -f 参数代表即使文件不存在也不报错
@@ -106,7 +106,7 @@ removed 'test2.txt'
 
 删除文件必须借助 rm 命令。如果一定要不依赖外部命令的话，zsh/files 模块里也有一个 rm 命令，可以用 zmodload zsh/files 加载，然后 rm 就变成了内部命令，用法基本相同。
 
-```
+```zsh
 % zmodload zsh/files
 % which -a rm
 rm: shell built-in command
@@ -121,7 +121,7 @@ rm: shell built-in command
 
 可以先把字符串拼接起来，然后一次性写入，这样比多次写入效率更高：
 
-```
+```zsh
 % str=ab
 % str+="\ncd"
 % str+="\n$str"
@@ -131,7 +131,7 @@ echo $str > test.txt
 
 可以直接把数组写入到文件，每行一个元素：
 
-```
+```zsh
 % array=(aa bb cc)
 
 % print -l $array > test.txt
@@ -139,7 +139,7 @@ echo $str > test.txt
 
 如果是将一段内容比较固定的字符串写入到文件，可以这样：
 
-```
+```zsh
 # 在脚本中也是如此，第二行以后的行首 > 代表换行，非输入内容
 # <<EOF 代表遇到 EOF 时会终止输入内容
 # 里边也可以使用变量
@@ -161,7 +161,7 @@ ee
 
 如果不喜欢使用重定向符号，还可以用哈希表来操作文件。Zsh 有一个 zsh/mapfile 模块，用起来很方便：
 
-```
+```zsh
 % zmodload zsh/mapfile
 
 # 这样就可以创建文件并写入内容，如果文件存在则会被覆盖
@@ -192,12 +192,12 @@ test2.txt
 
 有时我们需要从一个文件的中间位置（比如从第 100 的字符或者第三行开始）继续写入，覆盖之后的内容。Zsh 并不直接提供这样的方法，但我们可以迂回实现，先用 truncate 命令把文件截断，然后追加写。如果文件后边的内容还需要保留，可以在截断之前先读取进来（见下文读文件部分的例子），最后再写回去。
 
-```
+```zsh
 % echo 1234567890 > test.txt
 # 只保留前 5 个字符
 % truncate -s 5 test.txt
 % cat test.txt
-12345 
+12345
 % echo abcde >> test.txt
 % cat test.txt
 12345abcde
@@ -209,7 +209,7 @@ test2.txt
 
 读取整个文件比较容易：
 
-```
+```zsh
 % str=$(<test.txt)
 % echo $str
 aa
@@ -222,7 +222,7 @@ ee
 
 如果文件比较大，那读取整个文件会消耗很多资源，可以按行遍历文件内容：
 
-```
+```zsh
 % while {read i} {
 > echo $i
 > } <test.txt
@@ -238,7 +238,7 @@ read 命令是从标准输入读取一行内容，把标准输入重定向后，
 
 如果只需要读取指定的某行或者某些行，不需要用上边的方法加自己计数。
 
-```
+```zsh
 # (f)2 是读取第二行
 % echo ${"$(<test.txt)"[(f)2]}
 bb
@@ -248,7 +248,7 @@ bb
 
 读取文件内容到数组中，每行是数组的一个元素：
 
-```
+```zsh
 % array=(${(f)"$(<test.txt)"})
 ```
 
@@ -256,7 +256,7 @@ bb
 
 有时我们需要按字节数来读取文件内容，而不是按行读取。
 
-```
+```zsh
 % cat test.txt
 1234567890
 # -k5 是只最多读取 5 个字节，-u 0 是从 fd 0 读取，不然会卡住
@@ -271,7 +271,7 @@ bb
 
 Zsh 并没有直接提供这样的功能，但我们可以迂回实现。
 
-```
+```zsh
 % echo -n 1234567890 > test.txt
 # 先全部读进来
 % str=$(<test.txt)

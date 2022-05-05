@@ -10,7 +10,7 @@
 
 数组可以直接赋值使用，不需要提前声明。等号和小括号之间不能有空格，小括号中的元素以空格隔开。
 
-```
+```zsh
 % array=(a bc ccc dddd)
 # 用 $array 即可访问数组全部元素，输出时元素以空格分隔
 % echo $array
@@ -45,7 +45,7 @@ dddd
 
 ### 元素读写
 
-```
+```zsh
 % array=(a bc ccc dddd)
 
 # 用法和取字符串的第几个字符一样，从 1 开始算
@@ -83,7 +83,7 @@ eeeee
 
 ### 数组拼接
 
-```
+```zsh
 % array1=(a b c d)
 % array2=(1 2 3 4)
 
@@ -115,7 +115,7 @@ a b c d e f g
 
 ### 数组遍历
 
-```
+```zsh
 % array1=(a bb ccc dddd)
 % array2=(1 2 3)
 
@@ -145,7 +145,7 @@ dddd
 
 数组切片和字符串切片操作方法完全相同。
 
-```
+```zsh
 % array=(a bb ccc dddd)
 
 % echo $array[2,3]
@@ -165,7 +165,7 @@ a bb 1
 
 数组的元素查找方法，和字符串的子字符串查找语法一样。
 
-```
+```zsh
 % array=(a bb ccc dddd ccc)
 
 # 用小 i 输出从左到右第一次匹配到的元素位置
@@ -180,7 +180,7 @@ a bb 1
 % echo $array[(I)ccc]
 5
 
-# 如果找不到，返回 0 
+# 如果找不到，返回 0
 % echo $array[(I)xxx]
 0
 
@@ -199,7 +199,7 @@ good
 
 ### 元素排序
 
-```
+```zsh
 % array=(aa CCC b DD e 000 AA 3 aa 22)
 
 # 用小写字母 o 升序排列，从小到大
@@ -227,7 +227,7 @@ e DD CCC b AA aa aa 3 22 000
 
 ### 去除重复元素
 
-```
+```zsh
 % array=(ddd a bb a ccc bb ddd)
 
 % echo ${(u)array}
@@ -236,7 +236,7 @@ ddd a bb ccc
 
 ### 使用连续字符或者数值构造数组
 
-```
+```zsh
 # 大括号中的逗号分隔的字符串会被展开
 % array=(aa{bb,cc,11}) && echo $array
 aabb aacc aa11
@@ -277,7 +277,7 @@ aac
 
 ### 从字符串构造数组
 
-```
+```zsh
 % str="a bb ccc dddd"
 
 # ${=str} 可以将 str 内容按空格切分成数组
@@ -324,7 +324,7 @@ ccc
 
 `test.txt` 内容。
 
-```
+```zsh
 a
 bb
 ccc
@@ -333,7 +333,7 @@ dddd
 
 每行一个元素。
 
-```
+```zsh
 # f 的功能是将字符串以换行符分隔成数组
 # 双引号不可省略，不然会变成一个字符串，引号也可以加在 ${ } 上
 % array=(${(f)"$(<test.txt)"})
@@ -358,7 +358,7 @@ for i (${(f)"$(<test.txt)"}) {
 
 ### 从文件列表构造数组
 
-```
+```zsh
 # 这里的 * 即上一篇讲的通配符，所有的用法都可以在这里使用。
 % array=(/usr/bin/vim*)
 % print -l $array
@@ -373,7 +373,7 @@ for i (${(f)"$(<test.txt)"}) {
 
 ### 数组交集差集
 
-```
+```zsh
 % array1=(1 2 3)
 % array2=(1 2 4)
 
@@ -394,7 +394,7 @@ for i (${(f)"$(<test.txt)"}) {
 
 ### 数组交叉合并
 
-```
+```zsh
 % array1=(a b c d)
 % array2=(1 2 3)
 
@@ -411,7 +411,7 @@ a 1 b 2 c 3 d 1
 
 一些处理字符串的方法（主要是各种形式的截取、替换、转换等等），也可以用在数组上，效果是对数组中所有元素统一处理。
 
-```
+```zsh
 % array=(/a/b.htm /a/c /a/b/c.txt)
 
 # :t 是取字符串中的文件名，可以用在数组上，取所有元素的文件名
@@ -434,7 +434,7 @@ txt
 
 `:#` 也可以在数组上用，但更实用一些。
 
-```
+```zsh
 % array=(aaa bbb ccc)
 
 # :# 是排除匹配到的元素，类似 grep -v
