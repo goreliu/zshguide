@@ -73,7 +73,7 @@ abcdeabc
 % echo ${str##*b}
 cde
 
-# 删除右端匹配到的内容
+# 删除右端匹配到的内容，最大匹配
 % echo ${str%%d*}
 abc
 ```
